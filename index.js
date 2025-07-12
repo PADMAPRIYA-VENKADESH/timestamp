@@ -1,5 +1,6 @@
 // index.js
 // where your node app starts
+const path = require("path");
 
 // init project
 var express = require('express');
@@ -14,14 +15,42 @@ app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 20
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + '/views/index.html');
+// app.get("/", function (req, res) {
+//   res.sendFile(__dirname + '/views/index.html');
+// });
+
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
+app.get("/api/:date?",(req,res)=>{
+  const date=req.params.date;
+  console.log("req from api",date)
+    console.log("typeof:", typeof date);
+  if (!date) {
+    parsedDate = new Date();
+  }
+      else if (/^\d+$/.test(date)) {
+        parsedDate = new Date(Number(date));
+      }
+  else {
+    console.log("Input is a date string");
+    parsedDate = new Date(date);
+  }
+  if(parsedDate.toString()==="Invalid Date"){
+      res.json({error:"Invalid Date"}) 
+   }
+  res.json({
+    unix:parsedDate.getTime(),
+    utc:parsedDate.toString()
+  })
 
+
+})
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+  res.json({greeting: 'hello API'});  
 });
 
 
