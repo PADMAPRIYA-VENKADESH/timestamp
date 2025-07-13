@@ -31,7 +31,7 @@ app.get("/api/:date?",(req,res)=>{
   if (!date) {
     parsedDate = new Date();
   }
-      else if (/^\d+$/.test(date)) {
+  else if (/^\d+$/.test(date)) {
         parsedDate = new Date(Number(date));
       }
   else {
@@ -43,7 +43,7 @@ app.get("/api/:date?",(req,res)=>{
    }
   res.json({
     unix:parsedDate.getTime(),
-    utc:parsedDate.toString()
+    utc:parsedDate.toUTCString()
   })
 
 
